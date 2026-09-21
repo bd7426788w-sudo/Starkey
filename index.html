@@ -3,72 +3,346 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Roblox Audit Bot // Security Intelligence</title>
+    <title>CARPENTER // Elite Roblox Security Intelligence</title>
     <style>
-        body {
-            background-color: #0d1117;
-            color: #c9d1d9;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@400;600;800&display=swap');
+
+        :root {
+            --bg-color: #05070b;
+            --card-bg: rgba(13, 17, 23, 0.85);
+            --border-color: rgba(56, 139, 253, 0.2);
+            --accent-blue: #58a6ff;
+            --accent-glow: rgba(88, 166, 255, 0.4);
+            --danger-red: #f85149;
+            --text-main: #c9d1d9;
+            --text-muted: #8b949e;
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
+            justify-content: flex-start;
+            position: relative;
         }
-        .container {
+
+        /* Animated Grid Background */
+        body::before {
+            content: "";
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background-image: 
+                linear-gradient(rgba(56, 139, 253, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(56, 139, 253, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            transform: perspective(500px) rotateX(60deg);
+            animation: gridMove 20s linear infinite;
+            z-index: -1;
+        }
+
+        @keyframes gridMove {
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+            100% { transform: perspective(500px) rotateX(60deg) translateY(40px); }
+        }
+
+        /* Ambient Glow Effect */
+        .ambient-glow {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(88, 166, 255, 0.15) 0%, rgba(0,0,0,0) 70%);
+            top: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: -1;
+            filter: blur(60px);
+        }
+
+        header {
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(5, 7, 11, 0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 18px;
+            letter-spacing: 2px;
+            color: var(--accent-blue);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            background: rgba(46, 160, 67, 0.15);
+            border: 1px solid rgba(46, 160, 67, 0.4);
+            border-radius: 20px;
+            font-size: 11px;
+            font-family: 'JetBrains Mono', monospace;
+            color: #3fb950;
+            text-transform: uppercase;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #3fb950;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #3fb950;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(63, 185, 80, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(63, 185, 80, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(63, 185, 80, 0); }
+        }
+
+        .main-container {
+            max-width: 1000px;
+            width: 90%;
+            margin: 60px auto;
             text-align: center;
-            max-width: 600px;
-            padding: 40px;
-            background: #161b22;
-            border: 1px solid #30363d;
-            border-radius: 8px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+            animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: var(--accent-blue);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            display: block;
+        }
+
         h1 {
-            color: #58a6ff;
-            font-size: 24px;
-            margin-bottom: 10px;
+            font-size: clamp(32px, 5vw, 56px);
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: #ffffff;
+            margin-bottom: 20px;
+            line-height: 1.1;
         }
-        p {
-            color: #8b949e;
-            font-size: 14px;
-            line-height: 1.6;
+
+        h1 span {
+            background: linear-gradient(135deg, #58a6ff 0%, #1f6feb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
+
+        p.subtitle {
+            font-size: 16px;
+            color: var(--text-muted);
+            max-width: 650px;
+            margin: 0 auto 35px auto;
+            line-height: 1.7;
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            margin-bottom: 60px;
+            flex-wrap: wrap;
+        }
+
         .btn {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 12px 24px;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .btn-primary {
             background-color: #238636;
             color: #ffffff;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: bold;
-            transition: background 0.2s;
+            box-shadow: 0 0 20px rgba(35, 134, 54, 0.4);
+            border: 1px solid rgba(255,255,255,0.1);
         }
-        .btn:hover {
+
+        .btn-primary:hover {
             background-color: #2ea043;
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(46, 160, 67, 0.6);
         }
-        .footer {
-            margin-top: 30px;
+
+        .btn-secondary {
+            background-color: rgba(22, 27, 34, 0.8);
+            color: var(--text-main);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(30, 36, 46, 1);
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            text-align: left;
+            margin-bottom: 60px;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 28px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px var(--accent-glow);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
+        }
+
+        .feature-icon {
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+
+        .feature-card h3 {
+            font-size: 18px;
+            color: #ffffff;
+            margin-bottom: 10px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .feature-card p {
+            font-size: 13px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        footer {
+            width: 100%;
+            padding: 30px;
+            text-align: center;
+            border-top: 1px solid var(--border-color);
+            font-family: 'JetBrains Mono', monospace;
             font-size: 12px;
-            color: #484f58;
-            letter-spacing: 1px;
+            color: var(--text-muted);
+            background: var(--bg-color);
+            margin-top: auto;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>ROBLOX SECURITY AUDIT BOT</h1>
-        <p>Run advanced intelligence checks, detect alt accounts, track historical aliases, and automatically filter blacklisted network associations with precision.</p>
+    <div class="ambient-glow"></div>
+
+    <header>
+        <div class="logo-area">
+            <span>🛡️ CARPENTER.SEC</span>
+        </div>
+        <div class="status-badge">
+            <div class="pulse-dot"></div>
+            SYSTEM OPERATIONAL
+        </div>
+    </header>
+
+    <div class="main-container">
+        <span class="hero-tag">// Enterprise Discord & Roblox Security Suite</span>
+        <h1>Advanced Threat Assessment <span>Built for Scale</span></h1>
+        <p class="subtitle">Deploy automated intelligence audits, pinpoint alt accounts, analyze historical tracking, and filter blacklisted network associations instantly inside Discord.</p>
         
-        <!-- Replace '#' with your actual Discord Bot Invite Link -->
-        <a href="#" class="btn" target="_blank">ADD TO DISCORD</a>
-        
-        <div class="footer">POWERED BY CARPENTER</div>
+        <div class="cta-group">
+            <!-- Replace '#' with your actual bot invite link -->
+            <a href="#" class="btn btn-primary" target="_blank">
+                ⚡ Add to Discord
+            </a>
+            <a href="#features" class="btn btn-secondary">
+                Explore Features
+            </a>
+        </div>
+
+        <div id="features" class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🔍</div>
+                <h3>/robloxcheck</h3>
+                <p>Executes deep-level network inspections, calculates a 0-100% Trust Score baseline, and flags high-risk behavioral indicators.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🚨</div>
+                <h3>Multi-Blacklist Engine</h3>
+                <p>Scans visible friend connections against a persistent security blacklist database, compounding penalties dynamically.</p>
+            </div>
+
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3>Precision Metrics</h3>
+                <p>Tracks account creation age to the day, historical alias name changes, inventory visibility, and follower network sizes.</p>
+            </div>
+        </div>
     </div>
+
+    <footer>
+        POWERED BY CARPENTER SEC // SECURE DISCORD-ROBLOX INFRASTRUCTURE
+    </footer>
 
 </body>
 </html>
